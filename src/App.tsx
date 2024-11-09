@@ -1,12 +1,18 @@
+// src/App.tsx
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/home';
+import BreweryDetails from './pages/brewery';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      here we go!
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/brewery/:id" element={<BreweryDetails />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
