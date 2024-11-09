@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
 const apiUrl = process.env.REACT_APP_API_URL;
-console.log(apiUrl)
 
 const fetchBreweries = async (url: string) => {
     const response = await fetch(url);
@@ -19,11 +18,11 @@ const fetchBreweryById = async (id: string) => {
     return response.json();
 };
 
-export const useFetchBreweries = (search: string) => {
-    const url = `${apiUrl}${search ? `?by_name=${search}` : ''}`;
+export const useFetchBreweries = (search: string, page: number, perPage: number) => {
+    const url = `${apiUrl}${search ? `/search?query=${search}&per_page=${perPage}` : `?page=${page}&per_page=${perPage}`}`;
 
     return useQuery({
-        queryKey: ['breweries', search],
+        queryKey: ['breweries', search, page],
         queryFn: () => fetchBreweries(url),
         retry: false,
         refetchOnWindowFocus: false,
@@ -39,3 +38,4 @@ export const useFetchBreweryById = (id: string) => {
         refetchOnWindowFocus: false,
     });
 };
+
