@@ -74,6 +74,21 @@ Make sure you have the following installed on your machine:
 
    Open your web browser and navigate to `http://localhost:3000` to explore the Brewery App.
 
+## API Description
+
+The Brewery App utilizes the [Open Brewery DB](https://www.openbrewerydb.org/) API, which provides a simple RESTful interface to access information about breweries across the United States. The API offers endpoints to retrieve brewery details, including names, types, locations, and contact information.
+
+### How It Was Used
+
+In this application, the API is called to fetch a list of breweries, enabling users to search and filter the results based on their preferences. The data is managed using React Query, which handles fetching, caching, and synchronizing the data with the server efficiently.
+
+## Trade-offs and Limitations
+
+Due to time constraints during development, a few potential features and enhancements were not implemented, including:
+
+- **Dark Theme Toggle**: Implementing a dark theme toggle for improved user experience during different lighting conditions was planned but not completed.
+- **Unit Tests**: Writing comprehensive unit tests to ensure the reliability and robustness of the application was another area that was limited by time. Unit tests can help catch bugs early and improve code maintainability.
+
 ## Features
 
 - **Search Functionality**: Easily search for breweries by name.
