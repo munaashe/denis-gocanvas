@@ -1,24 +1,54 @@
 import React, { useState } from 'react';
 import { useFetchBreweries } from '../../api/breweries';
+import SearchBar from '../../components/search-bar';
+import FilterDropdown from '../../components/filter-dropdown';
 import BreweryCard from '../../components/brewery-card';
 import styled from 'styled-components';
+import { Brewery } from '../../utils/types';
+import Text from '../../components/text';
+
+const MainContainer = styled.div`
+    padding: 4px; /* Small screen padding */
+    @media (min-width: 600px) {
+        padding: 8px; /* Large screen padding */
+    }
+`;
+
+const TitleSectionContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    @media (min-width: 1024px) {
+        display: flex;
+        width: full;
+        flex-direction: row;
+    }
+`;
+
+const ControlsContainer = styled.div`
+    display: flex;
+    padding: 4px;
+    gap: 4px;
+    width: 100%;
+`;
 
 const Grid = styled.div`
     display: grid;
-    grid-template-columns: repeat(1, 1fr); /* Default to 1 column */
-    gap: 16px; /* Space between cards */
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
     padding: 16px;
 
     @media (min-width: 600px) {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+        grid-template-columns: repeat(2, 1fr);
     }
 
     @media (min-width: 900px) {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+        grid-template-columns: repeat(3, 1fr);
     }
 
     @media (min-width: 1200px) {
-        grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+        grid-template-columns: repeat(4, 1fr);
     }
 `;
 
@@ -51,8 +81,19 @@ const Button = styled.button`
 const Home = () => {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
-    const perPage = 10; 
-    const { data, error, isLoading } = useFetchBreweries(search, page, perPage);
+    const [country, setCountry] = useState('');
+    const perPage = 10;
+
+    const countries = [
+        'United States',
+        'Canada',
+        'Germany',
+        'United Kingdom',
+        'Belgium',
+        'South Korea',
+    ];
+
+    const { data, error, isLoading } = useFetchBreweries(search, page, perPage, country);
 
     const handleNextPage = () => {
         if (data && data.length === perPage) {
@@ -66,24 +107,26 @@ const Home = () => {
         }
     };
 
+    const handleSearch = (searchTerm: string) => {
+        setSearch(searchTerm);
+        setPage(1);
+    };
+
     return (
-        <div>
-            <h1>Home Page</h1>
-            <input
-                type="text"
-                placeholder="Search breweries by name"
-                value={search}
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    setPage(1); 
-                }}
-            />
+        <MainContainer>
+            <TitleSectionContainer>
+                <Text variant='title5' style={{whiteSpace: 'nowrap', width: '100%'}}>Great Breweries</Text>
+                <ControlsContainer>
+                    <SearchBar onSearch={handleSearch} />
+                    <FilterDropdown options={countries} selectedOption={country} setSelectedOption={setCountry} />
+                </ControlsContainer>
+            </TitleSectionContainer>
             {isLoading && <p>Loading...</p>}
             {error && <p>Error: {error.message}</p>}
             {data && data.length > 0 ? (
                 <>
                     <Grid>
-                        {data.map((brewery: any) => (
+                        {data.map((brewery: Brewery) => (
                             <BreweryCard
                                 key={brewery.id}
                                 id={brewery.id}
@@ -106,7 +149,7 @@ const Home = () => {
             ) : (
                 !isLoading && <p>No breweries found.</p>
             )}
-        </div>
+        </MainContainer>
     );
 };
 

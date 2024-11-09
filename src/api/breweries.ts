@@ -18,11 +18,12 @@ const fetchBreweryById = async (id: string) => {
     return response.json();
 };
 
-export const useFetchBreweries = (search: string, page: number, perPage: number) => {
-    const url = `${apiUrl}${search ? `/search?query=${search}&per_page=${perPage}` : `?page=${page}&per_page=${perPage}`}`;
+export const useFetchBreweries = (search: string, page: number, perPage: number, country: string) => {
+    const url = `${apiUrl}/${search ? `/search?query=${search}&per_page=${perPage}` : `${country ? `?by_country=${country}&per_page=${perPage}` : `?page=${page}&per_page=${perPage}}`}`
+        }`;
 
     return useQuery({
-        queryKey: ['breweries', search, page],
+        queryKey: ['breweries', search, page, country],
         queryFn: () => fetchBreweries(url),
         retry: false,
         refetchOnWindowFocus: false,
@@ -38,4 +39,3 @@ export const useFetchBreweryById = (id: string) => {
         refetchOnWindowFocus: false,
     });
 };
-
